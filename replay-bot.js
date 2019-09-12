@@ -3,7 +3,7 @@
         chats_unread:        "span > div > span[class]:not([class='']):not(:empty)",
 
         chat_title:          "span[title]",
-        chat_switch:         "span[title='xxx']",
+        chat_switch:         "span[title='xxx']", //read here: https://github.com/fznhq/whatsapp-web-replay-bot#how-to-use-it-
 
         message:             ".selectable-text",
         message_in:          ".message-in",
