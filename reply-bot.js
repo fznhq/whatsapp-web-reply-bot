@@ -30,9 +30,9 @@
     };
 
     function getCommand( text, obj ) {
-        var command, regex, output  = "";
+        var command, regex, output  = "", prefix = "@";
         
-        if ( text.charAt(0) === "@") {
+        if ( text.charAt(0) === prefix ) {
             command = commandList[text.slice(1).toUpperCase()];
 
             if ( command ) {
@@ -122,7 +122,7 @@
         var messages = parent(find("message_all"), 2);
         var unreads  = [];
 
-        if ( messages && !find("message_out", messages.lastElementChild)) {
+        if ( messages && !find("message_out", messages.lastElementChild) ) {
             var newMessageInfo = parent(find("new_message_info", messages), 1);
 
             if ( newMessageInfo || find("message_all", messages, true).length === find("message_in", messages, true).length ) {
