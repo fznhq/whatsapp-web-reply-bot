@@ -1,7 +1,7 @@
 # How To Use It ?
 1. Open `Chrome / Firefox`, then visit `web.whatsapp.com`
 2. Press `F12`, click at `console`
-3. Copy all the `replay-bot.js` code, replace `xxx` (must be existing chat) in `chat_switch` with the chat you want to use for decoy, then paste into console 
+3. Copy all the `reply-bot.js` code, replace `xxx` (must be existing chat) in `chat_switch` with the chat you want to use for decoy, then paste into console 
 4. Done.
 5. Now ask friend to send `@hello`
 
