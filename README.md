@@ -1,3 +1,8 @@
+# Status
+Working on:
+- Whatsapp and Whatsapp Bussiness
+- Private Chat And Group Chat
+
 # How To Use It ?
 1. Open `Chrome / Firefox`, then visit `web.whatsapp.com`
 2. Press `F12`, click at `console`
