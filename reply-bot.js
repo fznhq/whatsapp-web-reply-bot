@@ -71,7 +71,7 @@
     }
 
     function fireMouse( element, eventType ) {
-        element && element.dispatchEvent(new MouseEvent(eventType, { bubbles: true, buttons: 1 }));
+        element && element.dispatchEvent(new MouseEvent(eventType, { bubbles: true }));
     }
 
     function fireEvent( element, eventType ) {
@@ -180,10 +180,13 @@
             chat = unreadChats[i];
             selectChat(chat, function() {
                 replayUnreadMessages(i++);
-                chatSwitch();
 
-                if ( i === lengthChats ) repeat(startReplayBot);
-                else repeat(process);
+                if ( i === lengthChats ) {
+                    chatSwitch();
+                    repeat(startReplayBot);
+                } else {
+                    repeat(process);
+                }
             });
             
             return true;
