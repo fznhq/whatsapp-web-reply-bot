@@ -1,7 +1,7 @@
 # Status
 Working on:
 - Whatsapp and Whatsapp Bussiness
-- Private Chat And Group Chat
+- Personal Chat And Group Chat
 
 # How To Use It ?
 1. Open `Chrome / Firefox`, then visit `web.whatsapp.com`
