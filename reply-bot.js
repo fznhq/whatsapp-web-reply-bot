@@ -26,14 +26,14 @@
     };
 
     var commandList = {
-        HELLO: "Hai {name}!"
+        hello: "Hai {name}!"
     };
 
     function getCommand( text, obj ) {
         var command, regex, output  = "", prefix = "@";
         
         if ( text.charAt(0) === prefix ) {
-            command = commandList[text.slice(1).toUpperCase()];
+            command = commandList[text.slice(1).toLowerCase()];
 
             if ( command ) {
                 for ( data in obj ) {

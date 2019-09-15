@@ -32,5 +32,9 @@ Help me fix then :)
 # Contribute
 You are welcome to contribute or fix this project.
 
+# Future Plan
+- Fix and update this script
+- Will not add more features
+
 # Legal
 This code is in no way affiliated with, authorized, maintained, sponsored or endorsed by WhatsApp or any of its affiliates or subsidiaries. This is an independent and unofficial software. Use at your own risk.
