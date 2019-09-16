@@ -1,5 +1,5 @@
 # Status
-Working on:
+#### Working on:
 - Whatsapp and Whatsapp Bussiness
 - Personal Chat And Group Chat
 
@@ -11,8 +11,8 @@ Working on:
 5. Now ask friend to send `@hello`
 
 # F A Q
-#### Where you got the inspiration ?
-[Here](https://github.com/bruno222/whatsapp-web-bot/), thanks to [Bruno Kilian](https://github.com/bruno222)
+#### I think there're some bugs on your code!
+Help me fix then :)
 #### Can my account got banned ?
 Hum, so you already know that Whatsapp does not allow Bots, right?
 So ofcourse, Whatsapp will ban you forever if they discovery you are running a Bot on long-term. For a small test: Don't worry, go forward.
@@ -26,15 +26,18 @@ A lot...
 1. As this bot handling DOM directly, this bot can't process hundred message at once.
 2. Can't start a message with unknown person.
 3. Need install whatsapp on your phone, connect it on wifi, as long as you using this.
-#### I think there're some bugs on your code
-Help me fix then :)
+#### Where do you get inspiration ?
+[Here](https://github.com/bruno222/whatsapp-web-bot/), thanks to [Bruno Kilian](https://github.com/bruno222)
+
+# Future Plan
+- Fix and update
+- Will not add more features
 
 # Contribute
 You are welcome to contribute or fix this project.
 
-# Future Plan
-- Fix and update this script
-- Will not add more features
+# My Inspiration
+
 
 # Legal
 This code is in no way affiliated with, authorized, maintained, sponsored or endorsed by WhatsApp or any of its affiliates or subsidiaries. This is an independent and unofficial software. Use at your own risk.
