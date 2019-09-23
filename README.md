@@ -20,7 +20,7 @@ But, i can't guarantee that you are not getting banned.
 #### Why you need chat for decoy ?
 This bot needs it to make sure new message are read,
 so by allowing bot to switch chat to other chat (which don't / won't has new message),
-so the new message will not be `accidentally` read
+so the new message will not be "accidentally" read
 #### So... what the limitation ?
 A lot...
 1. As this bot handling DOM directly, this bot can't process hundred message at once.
@@ -31,6 +31,7 @@ A lot...
 
 # Future Plan
 - Fix and update
+- Optimization and reduce size
 - Will not add more features
 
 # Contribute

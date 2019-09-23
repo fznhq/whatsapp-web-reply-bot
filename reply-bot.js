@@ -174,11 +174,10 @@
     function startReplayBot() {
         var unreadChats = getUnreadChats();
         var lengthChats = unreadChats.length;
-        var chat, i = 0;
+        var i = 0;
 
         var process = function() {
-            chat = unreadChats[i];
-            selectChat(chat, function() {
+            selectChat(unreadChats[i], function() {
                 replayUnreadMessages(i++);
 
                 if ( i === lengthChats ) {
