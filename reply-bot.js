@@ -52,12 +52,12 @@
     
     function find( name, context, all ) {
         var context = context || document;
-        var method  = all ? "querySelectorAll" : "querySelector";
+        var method  = "querySelector" + (all ? "All" : "");
         return context[method](selector[name]);
     }
 
-    function next( element, find ) {
-        while ( element && (typeof find === "number" ? find-- : element !== find) ) element = element.nextSibling;
+    function next( element, findEl, level ) {
+        while ( element && (findEl ? element !== findEl : level--) ) element = element.nextSibling;
         return element;
     }
 
@@ -126,7 +126,7 @@
             var newMessageInfo = parent(find("new_message_info", messages), 1);
 
             if ( newMessageInfo || find("message_all", messages, true).length === find("message_in", messages, true).length ) {
-                var newMessageStart = next(newMessageInfo, 1);
+                var newMessageStart = next(newMessageInfo, null, 1);
                 var lastMessageOut  = parent(last(find("message_out", messages, true)), 1);
                 var afterMessageOut = next(newMessageStart, lastMessageOut);
                 var newMessage      = false;
