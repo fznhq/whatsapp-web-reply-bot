@@ -70,6 +70,15 @@
         return element[element.length - 1];
     }
 
+    /**
+     * Because this function only use around this.
+     * Will make it easy to call.
+     * Only use for single class from selector.
+     */    
+    function hasClass( element, $class ) {
+        return element.classList.contains(selector[$class].slice(1));
+    }
+
     function fireMouse( element, eventType ) {
         element && element.dispatchEvent(new MouseEvent(eventType, { bubbles: true }));
     }
@@ -82,10 +91,10 @@
         Object.getOwnPropertyDescriptor($interface.prototype, property).set.call(element, data);
     }
 
-    function repeat( fn, delay ) {
+    function repeat( fn, delay = 300 ) {
         setTimeout(function() {
             fn() || repeat(fn, delay);
-        }, delay || 300);
+        }, delay);
     }
 
     function getUnreadChats() {
@@ -119,7 +128,7 @@
     }
 
     function getUnreadMessages() {
-        var messages = parent(find("message_all"), 2);
+        var messages = parent(find("message_all"), 1);
         var unreads  = [];
 
         if ( messages && !find("message_out", messages.lastElementChild) ) {
@@ -127,7 +136,7 @@
 
             if ( newMessageInfo || find("message_all", messages, true).length === find("message_in", messages, true).length ) {
                 var newMessageStart = next(newMessageInfo, null, 1);
-                var lastMessageOut  = parent(last(find("message_out", messages, true)), 1);
+                var lastMessageOut  = last(find("message_out", messages, true));
                 var afterMessageOut = next(newMessageStart, lastMessageOut);
                 var newMessage      = false;
                 var noRepeatMessage = false;
@@ -135,7 +144,7 @@
                 messages.childNodes.forEach(function( message ) {
                     if ( !newMessageStart || (!newMessage && message === newMessageStart) ) newMessage = true;
                     if ( !afterMessageOut || (!noRepeatMessage && newMessage && message === afterMessageOut) ) noRepeatMessage = true;
-                    if ( newMessage && noRepeatMessage && find("message_in", message) && !find("message_ignore", message) ) unreads.push(message);
+                    if ( newMessage && noRepeatMessage && hasClass(message, "message_in") && !find("message_ignore", message) ) unreads.push(message);
                 });
             }
         }
