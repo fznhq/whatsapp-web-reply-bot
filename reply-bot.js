@@ -1,15 +1,7 @@
  (function(document) {   
     var selector = {
-        chats_unread:        "span > div > span[class]:not([class='']):not(:empty)",
-
+        chat_unread:        "span > div > span[aria-label]:not(:empty)",
         chat_title:          "span[title]",
-
-        /**
-         * Read Here :
-         * https://github.com/fznhq/whatsapp-web-reply-bot#how-to-use-it-
-         * https://github.com/fznhq/whatsapp-web-reply-bot#why-you-need-chat-for-decoy-
-         */
-        chat_switch:         "span[title='xxx']",
 
         message:             ".selectable-text",
         message_in:          ".message-in",
@@ -25,39 +17,31 @@
         selected_chat_title: "header span[title]"
     };
 
-    var commandList = {
-        hello: "Hai {name}!"
-    };
-
-    function getCommand( text, obj ) {
-        var command, regex, output  = "", prefix = "@";
+    
+    var replyList = function(message, info) {
         
-        if ( text.charAt(0) === prefix ) {
-            command = commandList[text.slice(1).toLowerCase()];
-
-            if ( command ) {
-                for ( data in obj ) {
-                    if ( obj.hasOwnProperty(data) ) {
-                        regex   = new RegExp(`{${data}}`, "ig");
-                        command = command.replace(regex, obj[data]);
-                    }
-                }
-
-                output = command;
-            }
+        if ( message == "@hello") {
+            return `Hai ${info.name}`;
+        }
+        
+        else if ( message == "@time" ) {
+            return `Time ${Date()}`
         }
 
-        return output;
     }
     
+    function getContext( context ) {
+        return context || document;
+    }
+
     function find( name, context, all ) {
-        var context = context || document;
-        var method  = "querySelector" + (all ? "All" : "");
-        return context[method](selector[name]);
+        var method = "querySelector";
+        if ( all ) method += "All";
+        return getContext(context)[method](selector[name]);
     }
 
     function next( element, findEl, level ) {
-        while ( element && (findEl ? element !== findEl : level--) ) element = element.nextSibling;
+        while ( element && (findEl ? element !== findEl : level--) ) element = element.nextSibling; 
         return element;
     }
 
@@ -70,13 +54,8 @@
         return element[element.length - 1];
     }
 
-    /**
-     * Because this function only use around this.
-     * Will make it easy to call.
-     * Only use for single class from selector.
-     */    
-    function hasClass( element, $class ) {
-        return element.classList.contains(selector[$class].slice(1));
+    function hasClass( element, name ) {
+        return element.classList.contains(selector[name].slice(1));
     }
 
     function fireMouse( element, eventType ) {
@@ -91,24 +70,19 @@
         Object.getOwnPropertyDescriptor($interface.prototype, property).set.call(element, data);
     }
 
-    function repeat( fn, delay = 300 ) {
+    function repeat( fn ) {
         setTimeout(function() {
-            fn() || repeat(fn, delay);
-        }, delay);
+            fn() || repeat(fn);
+        }, 200);
     }
 
-    function getUnreadChats() {
-        var unreads  = [];
-        var elements = find("chats_unread", null, true);
+    function getUnreadChat() {
+        var unread = find("chat_unread");
 
-        elements.forEach(function( element ) {
-            unreads.push({
-                chat: parent(element, 6),
-                span: element
-            });
-        });
-
-        return unreads;
+        return unread && {
+            chat: parent(unread, 6),
+            span: unread
+        };
     }
 
     function selectChat( element, done ) {
@@ -127,6 +101,10 @@
         });
     }
 
+    function isNewChat( context ) {
+        return find("message_all", context, true).length === find("message_in", context, true).length;
+    }
+
     function getUnreadMessages() {
         var messages = parent(find("message_all"), 1);
         var unreads  = [];
@@ -134,7 +112,7 @@
         if ( messages && !find("message_out", messages.lastElementChild) ) {
             var newMessageInfo = parent(find("new_message_info", messages), 1);
 
-            if ( newMessageInfo || find("message_all", messages, true).length === find("message_in", messages, true).length ) {
+            if ( newMessageInfo || isNewChat(messages) ) {
                 var newMessageStart = next(newMessageInfo, null, 1);
                 var lastMessageOut  = last(find("message_out", messages, true));
                 var afterMessageOut = next(newMessageStart, lastMessageOut);
@@ -155,14 +133,14 @@
     function replayUnreadMessages() {
         var messages = getUnreadMessages();
         var regName  = /\](.*?)\:/;
-        var text, name, command;
+        var text, name, reply;
 
         messages.forEach(function( message ) {
             name = find("message_data", message).getAttribute(selector.message_data.slice(1, -1)).match(regName)[1].trim();
             text = find("message", message).innerText.trim();
-            command = getCommand(text, { name: name });
+            reply = replyList(text, { name: name });
 
-            if ( command ) sendMessage(command);
+            if ( reply ) sendMessage(reply);
         });
     }
 
@@ -174,37 +152,21 @@
         fireMouse(btn, "click");
     }
 
-    function chatSwitch() {
-        selectChat({
-            chat: parent(find("chat_switch"), 4)
-        });
-    }
-
     function startReplayBot() {
-        var unreadChats = getUnreadChats();
-        var lengthChats = unreadChats.length;
-        var i = 0;
+        var unreadChat = getUnreadChat();
 
-        var process = function() {
-            selectChat(unreadChats[i], function() {
-                replayUnreadMessages(i++);
-
-                if ( i === lengthChats ) {
-                    chatSwitch();
-                    repeat(startReplayBot);
-                } else {
-                    repeat(process);
-                }
+        if ( unreadChat ) {
+            selectChat(unreadChat, function() {
+                replayUnreadMessages();
+                fireEvent(unreadChat.chat, "blur");
+                repeat(startReplayBot);
             });
-            
-            return true;
-        };
+        } else {
+            repeat(startReplayBot);
+        }
 
-        if ( lengthChats ) repeat(process);
-        else repeat(startReplayBot);
-        
         return true;
     }
 
-    repeat(startReplayBot);
+    startReplayBot();
 })(document);
