@@ -25,7 +25,7 @@
         }
         
         else if ( message == "@time" ) {
-            return `Time ${Date()}`
+            return `Time ${Date()}`;
         }
 
     }
@@ -89,6 +89,7 @@
         if ( !element.chat ) return;
 
         fireMouse(element.chat, "mousedown");
+        fireEvent(element.chat, "focus");
         
         if ( !done ) return;
         if ( element.span ) element.span.innerHTML = "";
