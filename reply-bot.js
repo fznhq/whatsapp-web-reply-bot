@@ -1,6 +1,6 @@
  (function(document) {   
     var selector = {
-        chat_unread:        "span > div > span[aria-label]:not(:empty)",
+        chat_unread:         "span > div > span[aria-label]:not(:empty)",
         chat_title:          "span[title]",
 
         message:             ".selectable-text",
@@ -12,7 +12,7 @@
         message_ignore:      "[role='button'], a, img, [data-icon='media-play'], [data-icon='media-gif'], [data-icon='media-download'], [data-icon='media-cancel']",
         message_send_btn:    "footer span[data-icon='send']",
 
-        new_message_info:    ":scope > div > span[class]",
+        new_message_info:    "div > span[aria-live]",
 
         selected_chat_title: "header span[title]"
     };
@@ -41,7 +41,7 @@
     }
 
     function next( element, findEl, level ) {
-        while ( element && (findEl ? element !== findEl : level--) ) element = element.nextSibling; 
+        while ( element && (findEl ? element !== findEl : level--) ) element = element.nextSibling;
         return element;
     }
 
@@ -110,7 +110,7 @@
         var messages = parent(find("message_all"), 1);
         var unreads  = [];
 
-        if ( messages && !find("message_out", messages.lastElementChild) ) {
+        if ( messages && hasClass(messages.lastElementChild, "message_in") ) {
             var newMessageInfo = parent(find("new_message_info", messages), 1);
 
             if ( newMessageInfo || isNewChat(messages) ) {
