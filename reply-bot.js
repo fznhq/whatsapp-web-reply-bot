@@ -9,7 +9,7 @@
         message_all:         ".message-in, .message-out",
         message_box:         "footer div[contenteditable]",
         message_data:        "[data-pre-plain-text]",
-        message_ignore:      "[role='button'], a, img, [data-icon='media-play'], [data-icon='media-gif'], [data-icon='media-download'], [data-icon='media-cancel']",
+        message_ignore:      "div[role='button'], a, img, [data-icon='media-play'], [data-icon='media-gif'], [data-icon='media-download'], [data-icon='media-cancel']",
         message_send_btn:    "footer span[data-icon='send']",
 
         new_message_info:    "div > span[aria-live]",
