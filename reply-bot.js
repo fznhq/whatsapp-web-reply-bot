@@ -2,6 +2,7 @@
     var selector = {
         chat_unread:         "span > div > span[aria-label]:not(:empty)",
         chat_title:          "span[title]",
+        chat_group:          "[data-icon='default-group']",
 
         message:             ".selectable-text",
         message_in:          ".message-in",
@@ -10,13 +11,16 @@
         message_box:         "footer div[contenteditable]",
         message_data:        "[data-pre-plain-text]",
         message_ignore:      "div[role='button'], a, img, [data-icon='media-play'], [data-icon='media-gif'], [data-icon='media-download'], [data-icon='media-cancel']",
+        message_tail_in:     "[data-icon='tail-in']",
         message_send_btn:    "footer span[data-icon='send']",
 
         new_message_info:    "div > span[aria-live]",
 
+        user_name_group:     "span[dir='auto']",
+        user_name_personal:  "span[aria-label]",
+
         selected_chat_title: "header span[title]"
     };
-
     
     var replyList = function(message, info) {
         
@@ -81,7 +85,8 @@
 
         return unread && {
             chat: parent(unread, 6),
-            span: unread
+            span: unread,
+            isGroup: !!find("chat_group", parent(unread, 6))
         };
     }
 
@@ -89,7 +94,6 @@
         if ( !element.chat ) return;
 
         fireMouse(element.chat, "mousedown");
-        fireEvent(element.chat, "focus");
         
         if ( !done ) return;
         if ( element.span ) element.span.innerHTML = "";
@@ -131,13 +135,29 @@
         return unreads;
     }
 
-    function replayUnreadMessages() {
+    function getUserName( context ) {
+        var name = find("user_name_personal", context);
+
+        if ( name ) {
+            name = name.getAttribute(selector.user_name_personal.slice(5,-1)).slice(0, -1);
+        } else {
+            name = find("user_name_group", context).innerText;
+        }
+
+        return name.trim();
+    }
+
+    function replayUnreadMessages( isGroup ) {
         var messages = getUnreadMessages();
-        var regName  = /\](.*?)\:/;
         var text, name, reply;
 
         messages.forEach(function( message ) {
-            name = find("message_data", message).getAttribute(selector.message_data.slice(1, -1)).match(regName)[1].trim();
+            if ( isGroup ) {
+                if ( find("message_tail_in", message) ) name = getUserName(message);
+            } else {
+                name = getUserName(message);
+            }
+
             text = find("message", message).innerText.trim();
             reply = replyList(text, { name: name });
 
@@ -149,17 +169,23 @@
         var box = find("message_box");
         objSetter(box, Element, "innerHTML", message);
         fireEvent(box, "input");
+        fireEvent(box, "focus");
         var btn = parent(find("message_send_btn"), 1);
         fireMouse(btn, "click");
     }
 
+    function unfocusPage() {
+        fireEvent(getContext().documentElement, "blur");
+    }
+
     function startReplayBot() {
+        unfocusPage();
         var unreadChat = getUnreadChat();
 
         if ( unreadChat ) {
             selectChat(unreadChat, function() {
-                replayUnreadMessages();
-                fireEvent(unreadChat.chat, "blur");
+                replayUnreadMessages(unreadChat.isGroup);
+                unfocusPage();
                 repeat(startReplayBot);
             });
         } else {
@@ -168,6 +194,6 @@
 
         return true;
     }
-
+    
     startReplayBot();
 })(document);
